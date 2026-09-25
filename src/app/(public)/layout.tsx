@@ -27,12 +27,6 @@ export default function PublicLayout({
 
           <div className="flex items-center gap-3">
             <SearchCommand variant="button" />
-            <Link
-              href="/dashboard"
-              className="hidden rounded-md px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:block"
-            >
-              Acessar painel
-            </Link>
           </div>
         </div>
       </header>

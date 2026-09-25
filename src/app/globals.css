@@ -136,7 +136,7 @@
 
 /* Conteúdo renderizado dos artigos */
 .article-content {
-  @apply prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-foreground prose-a:text-primary prose-a:font-medium prose-img:rounded-lg prose-img:border prose-blockquote:border-l-primary prose-blockquote:not-italic prose-strong:text-foreground;
+  @apply prose prose-slate dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-foreground prose-a:text-primary prose-a:font-medium prose-img:rounded-lg prose-img:border prose-img:cursor-zoom-in prose-blockquote:border-l-primary prose-blockquote:not-italic prose-strong:text-foreground;
 }
 
 /* Editor Tiptap */

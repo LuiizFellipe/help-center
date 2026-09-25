@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Eye } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { extractToc } from "@/lib/toc";
+import { ArticleContent } from "@/components/public/article-content";
 import { CategoriesNav } from "@/components/public/categories-nav";
 import { TableOfContents } from "@/components/public/toc";
 import {
@@ -114,11 +115,7 @@ export default async function ArticlePage({
           </span>
         </div>
 
-        <div
-          className="article-content mt-6"
-          // HTML sanitizado na gravação do artigo (sanitize-html)
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <ArticleContent className="article-content mt-6" html={html} />
       </article>
 
       <aside className="hidden xl:block">

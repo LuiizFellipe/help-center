@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FileText, Loader2, Search } from "lucide-react";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -107,54 +108,58 @@ export function SearchCommand({
         title="Pesquisar na ajuda"
         description="Digite para buscar artigos publicados"
       >
-        <CommandInput
-          placeholder="Digite o que você procura…"
-          value={query}
-          onValueChange={setQuery}
-        />
-        <CommandList>
-          {loading ? (
-            <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground">
-              <Loader2 className="size-4 animate-spin" aria-hidden />
-              Buscando…
-            </div>
-          ) : query.trim().length >= 2 && results.length === 0 ? (
-            <CommandEmpty>Nenhum artigo encontrado.</CommandEmpty>
-          ) : results.length === 0 ? (
-            <div className="py-8 text-center text-sm text-muted-foreground">
-              Digite pelo menos 2 caracteres para buscar.
-            </div>
-          ) : (
-            <CommandGroup heading={`${results.length} resultado(s)`}>
-              {results.map((result) => (
-                <CommandItem
-                  key={result.id}
-                  value={`${result.title} ${result.category}`}
-                  onSelect={() => goTo(result.slug)}
-                >
-                  <FileText className="text-primary" aria-hidden />
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{result.title}</p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {result.category}
-                    </p>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          )}
-        </CommandList>
-        <div className="border-t px-3 py-2 text-xs text-muted-foreground">
-          Não encontrou? Veja{" "}
-          <Link
-            href="/buscar"
-            onClick={() => setOpen(false)}
-            className="font-medium text-primary hover:underline"
-          >
-            todos os artigos
-          </Link>{" "}
-          ou navegue pelas categorias.
-        </div>
+        {/* O <Command> raiz cria o store interno do cmdk — sem ele os
+            subcomponentes quebram com "reading 'subscribe'" */}
+        <Command>
+          <CommandInput
+            placeholder="Digite o que você procura…"
+            value={query}
+            onValueChange={setQuery}
+          />
+          <CommandList>
+            {loading ? (
+              <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground">
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+                Buscando…
+              </div>
+            ) : query.trim().length >= 2 && results.length === 0 ? (
+              <CommandEmpty>Nenhum artigo encontrado.</CommandEmpty>
+            ) : results.length === 0 ? (
+              <div className="py-8 text-center text-sm text-muted-foreground">
+                Digite pelo menos 2 caracteres para buscar.
+              </div>
+            ) : (
+              <CommandGroup heading={`${results.length} resultado(s)`}>
+                {results.map((result) => (
+                  <CommandItem
+                    key={result.id}
+                    value={`${result.title} ${result.category}`}
+                    onSelect={() => goTo(result.slug)}
+                  >
+                    <FileText className="text-primary" aria-hidden />
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{result.title}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {result.category}
+                      </p>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+          </CommandList>
+          <div className="border-t px-3 py-2 text-xs text-muted-foreground">
+            Não encontrou? Veja{" "}
+            <Link
+              href="/buscar"
+              onClick={() => setOpen(false)}
+              className="font-medium text-primary hover:underline"
+            >
+              todos os artigos
+            </Link>{" "}
+            ou navegue pelas categorias.
+          </div>
+        </Command>
       </CommandDialog>
     </>
   );
