@@ -116,9 +116,25 @@ curl -X POST http://localhost:3000/api/mcp \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/list"}'
 ```
 
-## Armazenamento de imagens
+## Armazenamento de imagens (S3 — Contabo)
 
-As imagens ficam em disco (pasta `uploads/`, definida por `UPLOAD_DIR`) com metadados no Postgres e são servidas por `/api/files/<id>` com cache imutável. Formatos aceitos: PNG, JPG, WEBP, GIF (até 5 MB).
+Os uploads vão para o **Contabo Object Storage** (compatível S3) quando as variáveis `S3_*` estão configuradas; sem elas, o app grava em disco local (`uploads/`, definida por `UPLOAD_DIR`) — útil em desenvolvimento.
+
+```env
+S3_ENDPOINT="https://usc1.contabostorage.com"
+S3_BUCKET="ajuda"
+S3_REGION="us-east-1"
+S3_ACCESS_KEY_ID="..."
+S3_SECRET_ACCESS_KEY="..."
+S3_PUBLIC_URL="https://usc1.contabostorage.com/ajuda"
+```
+
+Comportamento:
+
+- **Bucket público** (Configurar no painel da Contabo): o upload detecta o acesso público e os artigos referenciam a URL direta do bucket, com cache imutável no storage.
+- **Bucket privado**: as imagens são servidas pelo proxy `/api/files/<id>`, que busca os bytes no S3 — funciona sem nenhuma configuração extra.
+
+Em ambos os casos o metadado fica no Postgres (tabela `images`) e a migration aplica os campos no boot do servidor. Formatos aceitos: PNG, JPG, WEBP, GIF (até 5 MB).
 
 ## Scripts úteis
 

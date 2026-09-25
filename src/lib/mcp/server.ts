@@ -17,7 +17,11 @@ import {
   unpublishArticle,
   updateArticle,
 } from "@/lib/services/articles";
-import { listImages, saveImageBuffer } from "@/lib/services/images";
+import {
+  imageRecordUrl,
+  listImages,
+  saveImageBuffer,
+} from "@/lib/services/images";
 
 function json(data: unknown) {
   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
@@ -328,7 +332,7 @@ export function createHelpCenterMcpServer() {
         (await listImages()).map((image) => ({
           id: image.id,
           filename: image.filename,
-          url: `/api/files/${image.id}`,
+          url: imageRecordUrl(image),
           size: image.size,
           createdAt: image.createdAt,
         }))

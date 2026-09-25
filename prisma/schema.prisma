@@ -17,6 +17,11 @@ enum ArticleStatus {
   PUBLISHED
 }
 
+enum StorageType {
+  LOCAL
+  S3
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String
@@ -70,12 +75,15 @@ model Article {
 }
 
 model Image {
-  id        String   @id @default(cuid())
+  id        String      @id @default(cuid())
   filename  String
   mimeType  String
   size      Int
   alt       String?
-  createdAt DateTime @default(now())
+  storage   StorageType @default(LOCAL)
+  objectKey String?
+  isPublic  Boolean     @default(false)
+  createdAt DateTime    @default(now())
 
   @@map("images")
 }

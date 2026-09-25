@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getSessionOrNull } from "@/lib/auth-guard";
-import { listImages, saveImageBuffer } from "@/lib/services/images";
+import { imageRecordUrl, listImages, saveImageBuffer } from "@/lib/services/images";
 
 export async function POST(request: NextRequest) {
   const session = await getSessionOrNull();
@@ -40,6 +40,6 @@ export async function GET() {
   }
   const images = await listImages();
   return NextResponse.json(
-    images.map((image) => ({ ...image, url: `/api/files/${image.id}` }))
+    images.map((image) => ({ ...image, url: imageRecordUrl(image) }))
   );
 }

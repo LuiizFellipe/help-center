@@ -63,7 +63,7 @@ USER nextjs
 
 EXPOSE 3000
 
-# Aplica migrations pendentes antes de subir o servidor.
+# Aplica migrations pendentes (via npm run start) e sobe o servidor.
 # O seed NÃO roda no boot — execute uma única vez via console do Dokploy:
 #   npx prisma db seed
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
+CMD ["npm", "run", "start"]
