@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(EDITOR)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  articles Article[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  icon      String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  articles Article[]
+
+  @@map("categories")
+}
+
+model Article {
+  id          String        @id @default(cuid())
+  categoryId  String
+  title       String
+  slug        String        @unique
+  excerpt     String?
+  content     String
+  status      ArticleStatus @default(DRAFT)
+  order       Int           @default(0)
+  views       Int           @default(0)
+  publishedAt DateTime?
+  createdById String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  category  Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([categoryId, status])
+  @@index([status])
+  @@map("articles")
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  filename  String
+  mimeType  String
+  size      Int
+  alt       String?
+  createdAt DateTime @default(now())
+
+  @@map("images")
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  name       String
+  prefix     String
+  keyHash    String    @unique
+  lastUsedAt DateTime?
+  active     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+
+  @@map("api_keys")
+}
